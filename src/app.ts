@@ -4,7 +4,7 @@ import { CronJob } from "cron";
 import { startBot } from "./bot.js";
 
 function callPeriodically(callback: () => Promise<void>) {
-  const cronPattern = env.CRON_PATTERN ?? "0 0 19 * * *";
+  const cronPattern = env.CRON_PATTERN ?? "0 15 9 * * *";
   const job = new CronJob(cronPattern, callback);
   job.start();
   return () => job.stop();
