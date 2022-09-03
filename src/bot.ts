@@ -42,13 +42,19 @@ export function startBot(token: string) {
     }
   });
 
-  return async () => {
-    console.log("Updating euribor rates");
-    const rate = await fetchRate();
-    await addRate(rate);
-    const message = await getRateMessage();
-    for (const chat of await listChats()) {
-      await bot.sendMessage(chat, message);
-    }
+  return {
+    publishRate: async () => {
+      console.log("Updating euribor rate");
+      const rate = await fetchRate();
+      await addRate(rate);
+      console.log("Publishing euribor rate");
+      const message = await getRateMessage();
+      for (const chat of await listChats()) {
+        await bot.sendMessage(chat, message);
+      }
+    },
+    stopBot: async () => {
+      await bot.stopPolling();
+    },
   };
 }
