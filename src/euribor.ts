@@ -40,5 +40,8 @@ export async function fetchRate() {
         name: /(\d+ (?:week|month)).*/.exec(name)![1],
       }))
       .filter(({ name }) => name === "12 month")[0];
+  if (rate === undefined) {
+    throw new Error("Could not find 12 month rate in XML");
+  }
   return rate.value;
 }
