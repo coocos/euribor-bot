@@ -10,10 +10,10 @@ async function getRateMessage() {
     return "No rates found";
   }
   if (current === undefined) {
-    return `Joribor: ${prev.rate}%`;
+    return `Euribor: ${prev.rate}%`;
   }
   const emoji = current.rate > prev.rate ? "🚀" : "📉";
-  return `Joribor: ${current.rate}% ${emoji}`;
+  return `Euribor: ${current.rate}% ${emoji}`;
 }
 
 export function startBot(token: string) {
