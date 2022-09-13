@@ -3,6 +3,16 @@ import TelegramBot from "node-telegram-bot-api";
 import { listChats, addChat, deleteChat, getRates, addRate } from "./db.js";
 import { fetchRate } from "./euribor.js";
 
+function getRisingRateEmoji() {
+  const emojis = ["🚀", "📈", "💸", "💀"];
+  return emojis[Math.floor(Math.random() * emojis.length)];
+}
+
+function getFallingRateEmoji() {
+  const emojis = ["📉", "⬇️"];
+  return emojis[Math.floor(Math.random() * emojis.length)];
+}
+
 async function getRateMessage() {
   const rates = await getRates();
   const [prev, current] = rates.slice(-2);
@@ -12,7 +22,12 @@ async function getRateMessage() {
   if (current === undefined) {
     return `Euribor: ${prev.rate}%`;
   }
-  const emoji = current.rate > prev.rate ? "🚀" : "📉";
+  let emoji = "🤷‍♂️";
+  if (current.rate > prev.rate) {
+    emoji = getRisingRateEmoji();
+  } else if (current.rate < prev.rate) {
+    emoji = getFallingRateEmoji();
+  }
   return `Euribor: ${current.rate}% ${emoji}`;
 }
 
