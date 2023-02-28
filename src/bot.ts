@@ -65,7 +65,11 @@ export function startBot(token: string) {
       console.log("Publishing euribor rate");
       const message = await getRateMessage();
       for (const chat of await listChats()) {
-        await bot.sendMessage(chat, message);
+        try {
+          await bot.sendMessage(chat, message);
+        } catch (err: unknown) {
+          console.log(`Failed to publish rate to chat: ${chat}`, err);
+        }
       }
     },
     stopBot: async () => {
