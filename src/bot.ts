@@ -1,35 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
 
-import { listChats, addChat, deleteChat, getRates, addRate } from "./db.js";
-import { fetchRate } from "./euribor.js";
-
-function getRisingRateEmoji() {
-  const emojis = ["🚀", "📈", "💸", "💀"];
-  return emojis[Math.floor(Math.random() * emojis.length)];
-}
-
-function getFallingRateEmoji() {
-  const emojis = ["📉", "⬇️"];
-  return emojis[Math.floor(Math.random() * emojis.length)];
-}
-
-async function getRateMessage() {
-  const rates = await getRates();
-  const [prev, current] = rates.slice(-2);
-  if (prev === undefined) {
-    return "No rates found";
-  }
-  if (current === undefined) {
-    return `Euribor: ${prev.rate}%`;
-  }
-  let emoji = "🤷‍♂️";
-  if (current.rate > prev.rate) {
-    emoji = getRisingRateEmoji();
-  } else if (current.rate < prev.rate) {
-    emoji = getFallingRateEmoji();
-  }
-  return `Euribor: ${current.rate}% ${emoji}`;
-}
+import { listChats, addChat, deleteChat, addRate } from "./db.js";
+import { fetchRate } from "./services/rates.js";
+import { createRateMessage } from "./services/message.js";
 
 export function startBot(token: string) {
   const bot = new TelegramBot(token, { polling: true });
@@ -51,7 +24,7 @@ export function startBot(token: string) {
         await bot.sendMessage(msg.chat.id, "Chat removed");
         break;
       case "rate":
-        const message = await getRateMessage();
+        const message = await createRateMessage();
         await bot.sendMessage(msg.chat.id, message);
         break;
     }
@@ -63,7 +36,7 @@ export function startBot(token: string) {
       const rate = await fetchRate();
       await addRate(rate);
       console.log("Publishing euribor rate");
-      const message = await getRateMessage();
+      const message = await createRateMessage(false);
       for (const chat of await listChats()) {
         try {
           await bot.sendMessage(chat, message);
