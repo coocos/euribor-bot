@@ -1,7 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
 
-import { listChats, addChat, deleteChat, addRate } from "./db.js";
-import { fetchRate } from "./services/rates.js";
+import { listChats, addChat, deleteChat } from "./repositories/chat.js";
+import { addRate } from "./repositories/rates.js";
+import { getEuriborRate } from "./services/euribor.js";
 import { createRateMessage } from "./services/message.js";
 
 export function startBot(token: string) {
@@ -33,7 +34,7 @@ export function startBot(token: string) {
   return {
     publishRate: async () => {
       console.log("Updating euribor rate");
-      const rate = await fetchRate();
+      const rate = await getEuriborRate();
       await addRate(rate);
       console.log("Publishing euribor rate");
       const message = await createRateMessage(false);

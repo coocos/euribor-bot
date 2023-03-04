@@ -25,7 +25,7 @@ const EuriborXml = z.object({
   }),
 });
 
-export async function fetchRate() {
+export async function getEuriborRate() {
   const response = await fetch(EURIBOR_URL);
   const rawXml = await response.text();
   const parser = new XMLParser({

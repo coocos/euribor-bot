@@ -1,6 +1,6 @@
 import LRUCache from "lru-cache";
 
-import { getRates } from "../db.js";
+import { getRates } from "../repositories/rates.js";
 import { generateComment } from "./gpt.js";
 
 const CACHE_KEY = "rate.message";
