@@ -1,10 +1,10 @@
 # euribor-bot
 
-A simple Telegram bot which publishes 12 month Euribor rates once a day.
+A simple Telegram bot which publishes 12 month Euribor rates once a day and comments on them using ChatGPT.
 
 ## How it works
 
-The bot tracks the 12 month Euribor rate [published by the the Bank of Finland every day](https://www.suomenpankki.fi/WebForms/ReportViewerPage.aspx?report=/tilastot/markkina-_ja_hallinnolliset_korot/euribor_korot_today_xml_en&output=xml). When the rate is updated at around midday Finnish time, the bot sends it to all the channels it tracks.
+The bot tracks the 12 month Euribor rate [published by the the Bank of Finland every day](https://www.suomenpankki.fi/WebForms/ReportViewerPage.aspx?report=/tilastot/markkina-_ja_hallinnolliset_korot/euribor_korot_today_xml_en&output=xml). When the rate is updated at around midday Finnish time, the bot sends it to all the channels it tracks. It also reacts on the rate change by generating a comment using ChatGPT.
 
 Once the bot has been added to a channel, you need to send the `/euribor register` command so that the bot starts sending rates. If want to stop receiving rates, send `/euribor unregister`. You can also query the rate at any time with `/euribor rate`.
 
@@ -18,6 +18,8 @@ npm ci
 
 # Export the token received from the Botfather
 export TELEGRAM_BOT_TOKEN=your-token-goes-here
+# Export the API key from OpenAI
+export OPENAI_API_KEY=your-api-key-goes-here
 
 # Start the bot
 npm run dev
