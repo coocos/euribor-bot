@@ -27,11 +27,17 @@ export async function createRateMessage(useCache = true) {
   if (current === undefined) {
     return `Euribor: ${prev.rate}%`;
   }
-  let message = `12 kk euribor on ${current.rate}%! `;
+  let message = `12 kk euribor on edelleen ${current.rate}%. `;
   if (current.rate > prev.rate) {
-    message += await generateComment("negative");
+    message = `12 kk euribor nousi ja on jo ${
+      current.rate
+    }%! ${await generateComment("negative")}`;
   } else if (current.rate < prev.rate) {
-    message += await generateComment("positive");
+    message = `12 kk euribor laski ja on taas ${
+      current.rate
+    }%! ${await generateComment("positive")}`;
+  } else {
+    message += await generateComment("neutral");
   }
   cache.set(CACHE_KEY, message);
   return message;

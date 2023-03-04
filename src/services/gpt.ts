@@ -11,7 +11,9 @@ function configureClient() {
   return new OpenAIApi(configuration);
 }
 
-export async function generateComment(mood: "positive" | "negative") {
+export async function generateComment(
+  mood: "positive" | "negative" | "neutral"
+) {
   const client = configureClient();
   const completion = await client.createChatCompletion({
     model: MODEL,
