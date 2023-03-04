@@ -31,5 +31,5 @@ export async function generateComment(
   if (!completion.data.choices[0].message) {
     throw new Error("Empty API response");
   }
-  return completion.data.choices[0].message.content;
+  return completion.data.choices[0].message.content.replace(/"/g, "");
 }
