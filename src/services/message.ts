@@ -15,7 +15,7 @@ const cache = new LRUCache<string, string>({
 export async function createRateMessage(useCache = true) {
   if (useCache && cache.has(CACHE_KEY)) {
     console.log("Cache hit for rate message");
-    return cache.get("rateMessage")!;
+    return cache.get(CACHE_KEY)!;
   }
   console.log("Cache miss for rate message");
 
